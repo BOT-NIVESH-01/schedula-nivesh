@@ -1,0 +1,80 @@
+erDiagram
+    User ||--|| DoctorProfile : "is a"
+    User ||--|| PatientProfile : "is a"
+    User ||--o{ Notification : "receives"
+    DoctorProfile ||--o{ Slot : "manages"
+    DoctorProfile ||--o{ Appointment : "attends"
+    PatientProfile ||--o{ Appointment : "books"
+    Slot ||--o| Appointment : "reserved_for"
+    DoctorProfile ||--o{ Specialization : "has"
+
+    User {
+        uuid id PK
+        string email
+        string password
+        string first_name
+        string last_name
+        enum role
+        datetime created_at
+        datetime updated_at
+    }
+
+    DoctorProfile {
+        uuid id PK
+        uuid user_id FK
+        uuid specialization_id FK
+        text bio
+        string hospital_name
+        int experience_years
+        decimal consultation_fee
+        datetime updated_at
+    }
+
+    PatientProfile {
+        uuid id PK
+        uuid user_id FK
+        date date_of_birth
+        string gender
+        string blood_group
+        text medical_history
+        datetime updated_at
+    }
+
+    Slot {
+        uuid id PK
+        uuid doctor_id FK
+        datetime start_time
+        datetime end_time
+        enum status "AVAILABLE, BOOKED, CANCELLED"
+        date date
+        datetime updated_at
+    }
+
+    Appointment {
+        uuid id PK
+        uuid patient_id FK
+        uuid doctor_id FK
+        uuid slot_id FK
+        enum status
+        text reason_for_visit
+        text notes
+        datetime created_at
+        datetime updated_at
+    }
+
+    Notification {
+        uuid id PK
+        uuid user_id FK
+        string title
+        text message
+        enum type
+        boolean is_read
+        datetime created_at
+        datetime updated_at
+    }
+
+    Specialization {
+        uuid id PK
+        string name
+        text description
+    }
