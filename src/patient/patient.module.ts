@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PatientController } from './patient.controller';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  controllers: [PatientController]
+  imports: [AuthModule],
+  controllers: [PatientController],
 })
 export class PatientModule {}
