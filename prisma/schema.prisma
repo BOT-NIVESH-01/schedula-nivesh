@@ -71,8 +71,8 @@ model PatientProfile {
 model RecurringAvailability {
   id        Int       @id @default(autoincrement())
   dayOfWeek DayOfWeek
-  startTime String
-  endTime   String
+  startTime DateTime
+  endTime   DateTime
 
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -83,8 +83,8 @@ model RecurringAvailability {
 model CustomAvailability {
   id        Int      @id @default(autoincrement())
   date      DateTime
-  startTime String
-  endTime   String
+  startTime DateTime
+  endTime   DateTime
 
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
