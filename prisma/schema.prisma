@@ -28,6 +28,16 @@ enum DayOfWeek {
   SUNDAY
 }
 
+enum SchedulingType {
+  STREAM
+  WAVE
+}
+
+enum AppointmentStatus {
+  BOOKED
+  CANCELLED
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   firstName String
@@ -42,6 +52,9 @@ model User {
 
   recurringAvailabilities RecurringAvailability[]
   customAvailabilities    CustomAvailability[]
+
+  doctorSchedules DoctorSchedule[] @relation("DoctorSchedules")
+  appointments    Appointment[]    @relation("PatientAppointments")
 }
 
 model DoctorProfile {
@@ -90,4 +103,48 @@ model CustomAvailability {
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+}
+
+model DoctorSchedule {
+  id Int @id @default(autoincrement())
+
+  schedulingType SchedulingType
+
+  startTime DateTime
+  endTime   DateTime
+
+  slotDuration Int?
+  bufferTime   Int?
+
+  maxCapacity Int?
+
+  doctorId Int
+  doctor   User @relation("DoctorSchedules", fields: [doctorId], references: [id], onDelete: Cascade)
+
+  appointments Appointment[]
+
+  createdAt DateTime @default(now())
+
+  @@index([doctorId])
+}
+
+model Appointment {
+  id Int @id @default(autoincrement())
+
+  patientId Int
+  patient   User @relation("PatientAppointments", fields: [patientId], references: [id], onDelete: Cascade)
+
+  scheduleId Int
+  schedule   DoctorSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  tokenNumber Int?
+
+  appointmentStart DateTime?
+  appointmentEnd   DateTime?
+
+  status AppointmentStatus @default(BOOKED)
+
+  createdAt DateTime @default(now())
+
+  @@unique([patientId, scheduleId])
 }
