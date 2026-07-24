@@ -18,6 +18,16 @@ enum Gender {
   OTHER
 }
 
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   firstName String
@@ -29,28 +39,55 @@ model User {
 
   doctorProfile  DoctorProfile?
   patientProfile PatientProfile?
+
+  recurringAvailabilities RecurringAvailability[]
+  customAvailabilities    CustomAvailability[]
 }
 
 model DoctorProfile {
-  id               Int      @id @default(autoincrement())
-  specialization   String
-  experience       Int
-  qualification    String
-  consultationFee  Float
-  availability     String
-  profileDetails   String?
+  id              Int     @id @default(autoincrement())
+  specialization  String
+  experience      Int
+  qualification   String
+  consultationFee Float
+  availability    String
+  profileDetails  String?
 
-  userId Int @unique
+  userId Int  @unique
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PatientProfile {
-  id                    Int      @id @default(autoincrement())
-  age                   Int
-  gender                Gender
-  contactDetails        String
-  healthInformation     String?
+  id                Int     @id @default(autoincrement())
+  age               Int
+  gender            Gender
+  contactDetails    String
+  healthInformation String?
 
-  userId Int @unique
+  userId Int  @unique
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model RecurringAvailability {
+  id        Int       @id @default(autoincrement())
+  dayOfWeek DayOfWeek
+  startTime String
+  endTime   String
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model CustomAvailability {
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  startTime String
+  endTime   String
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
