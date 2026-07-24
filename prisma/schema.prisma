@@ -141,7 +141,7 @@ model Appointment {
 
   tokenNumber Int?
 
-  slotId Int?          @unique
+  slotId Int?
   slot   ScheduleSlot? @relation(fields: [slotId], references: [id])
 
   status AppointmentStatus @default(BOOKED)
