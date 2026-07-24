@@ -121,6 +121,8 @@ model DoctorSchedule {
   doctorId Int
   doctor   User @relation("DoctorSchedules", fields: [doctorId], references: [id], onDelete: Cascade)
 
+  slots ScheduleSlot[]
+
   appointments Appointment[]
 
   createdAt DateTime @default(now())
@@ -139,12 +141,28 @@ model Appointment {
 
   tokenNumber Int?
 
-  appointmentStart DateTime?
-  appointmentEnd   DateTime?
+  slotId Int?          @unique
+  slot   ScheduleSlot? @relation(fields: [slotId], references: [id])
 
   status AppointmentStatus @default(BOOKED)
 
   createdAt DateTime @default(now())
 
   @@unique([patientId, scheduleId])
+}
+
+model ScheduleSlot {
+  id Int @id @default(autoincrement())
+
+  scheduleId Int
+  schedule   DoctorSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  startTime DateTime
+  endTime   DateTime
+
+  isBooked Boolean @default(false)
+
+  appointment Appointment?
+
+  @@index([scheduleId])
 }

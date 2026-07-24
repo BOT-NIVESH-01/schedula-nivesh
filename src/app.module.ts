@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { DoctorModule } from './doctor/doctor.module';
 import { PatientModule } from './patient/patient.module';
 import { AvailabilityModule } from './availability/availability.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AvailabilityModule } from './availability/availability.module';
     DoctorModule,
     PatientModule,
     AvailabilityModule,
+    ScheduleModule,
   ],
 
   controllers: [AppController],
